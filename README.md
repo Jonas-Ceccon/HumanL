@@ -3,7 +3,7 @@ The GitHub of the HL project,
 ...
 Lol, this is only starting, it only has the merely functional python part done, I'm so lonely right now T_T
 
-I'm  currently working on a way to make a tool that will let people easily edit a LED strip or matrix that is compatible with the adafruit neomatrix library
+I'm  currently working on a way to make a tool that will let people easily edit a LED strip or a matrix that is compatible with the adafruit neomatrix library
 
 This is how it works :
 
