@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.colorchooser import *
 from functools import partial
+import serial
 
 class LED: #definition of the led objects
     def __init__(self,pos,R,G,B): #each led is defined by it's number attributed in the matrix following the arduino adafruit neomatrix standard
@@ -32,16 +33,30 @@ class MATRIX: #definition of the matrix object
 
     def writefile(self): #the function called when the WRITE button is pressed
       fil = open("map.txt", "w")
-      fil.write("START\n\n") #the sart marker for the arduino
+      fil.write(str(len(LEDLIST))+"\n")
+      fil.write("START"+"\n") #the sart marker for the arduino
       for i in range(len(LEDLIST)): #for each element
 
         fil.write(LEDLIST[i].pos+"\n")
         fil.write(LEDLIST[i].R+"\n")
         fil.write(LEDLIST[i].G+"\n")
-        fil.write(LEDLIST[i].B+"\n\n")
+        fil.write(LEDLIST[i].B+"\n")
 
-      fil.write("\nEND")# the end marker for the arduino
+      fil.write("END")# the end marker for the arduino
       fil.close()
+
+
+    def sendfile(self):
+        ser = serial.Serial('COM1', 9600) #the port that will be used for comunications
+
+        fil = open('map.txt', "r") # now we open the file that we created earlier
+        length = 4*int(fil.readline())+2 # we read the information that gives us the number of information that will be sent
+
+        for i in range(length): # we send the informations...
+            a=str((fil.readline())) # ...line by line
+            ser.write(bytes(a, 'utf-8'))
+
+        ser.close()
 
 
 
@@ -68,8 +83,12 @@ def interface(): #function building the user's interface
             row+=1
         else:
             column+=1
+            
     writebutton = Button(win, text = "WRITE", command=MAIN.writefile) #the button that write the text file
+    sendbutton = Button(win, text = "SEND", command=MAIN.sendfile)#the button that sends the text file to the arduino
+
     writebutton.grid(column = 9, row = 0) # /!\ if you are trying to change the parameters, the position of this button could be problematic, try to augment the column argument
+    sendbutton.grid(column = 9, row = 2)
     win.mainloop()#initialization of the interface
 
 def GetPosColor(n): #function returning the color picked by the user and the position of the selected led
