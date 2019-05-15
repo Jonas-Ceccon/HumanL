@@ -27,14 +27,18 @@ void loop() {
 
   delay(100);
   Serial.println("START");
-  delay(100);
+  while (!Serial.available()){
+    ;
+  }
   
   int lengt = Serial.read();
   delay(100);
   
   Serial.write(lengt);
-  delay(100);
-  
+
+  while (!Serial.available()){
+    ;
+  }
   if(Serial.readString()=="ERROR"){
     return;
   }
