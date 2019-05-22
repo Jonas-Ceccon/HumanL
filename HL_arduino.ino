@@ -29,11 +29,6 @@ void loop() {
   
   int lengt = Serial.read(); //this variable sent by python is the total ammount of data that will be sent through serial port (/!\ including the two markers, START and END /!\)
   delay(100);//wait for python
-  
-  Serial.write(lengt); //tell python which value was recieved
-  waitinput();//wait for python to compare it with his own value
-  if(Serial.readString()=="ERROR"){ //if Python and Arduino doesn't have the same value, Python will return an error, and the program will restart
-    return;
   }
   
   
