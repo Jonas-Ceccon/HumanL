@@ -50,13 +50,26 @@ class MATRIX: #definition of the matrix object
         ser = serial.Serial('COM1', 9600) #the port that will be used for comunications
 
         fil = open('map.txt', "r") # now we open the file that we created earlier
-        length = 4*int(fil.readline())+2 # we read the information that gives us the number of information that will be sent
-
+        length = 4*int(fil.readline())# we read the information that gives us the number of information that will be sent
+        
+        ser.write(bytes(fil.readline())) #We send the START marker
+        
+        recv = "" #this variable will contain things that the arduino sends
+            
+        for i in range(10000): #now we wait fir the arduino to respond
+            recv += str(ser.read_line()) #we add anything sent by the arduino to this variable
+        
+        print(recv) #debug    
+        
+        if recv == "" :
+            exit() #if we did not recieve anything, we close the program as there should be an error
+        
         for i in range(length): # we send the informations...
-            a=str((fil.readline())) # ...line by line
+            a=str(fil.readline()) # ...line by line
             print(a) #debug
             ser.write(bytes(a, 'utf-8'))
-
+            
+        ser.write(bytes(fil.readline())) #We send the END marker
         ser.close()
 
 
