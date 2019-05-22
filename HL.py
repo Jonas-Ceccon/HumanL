@@ -54,6 +54,7 @@ class MATRIX: #definition of the matrix object
 
         for i in range(length): # we send the informations...
             a=str((fil.readline())) # ...line by line
+            print(a) #debug
             ser.write(bytes(a, 'utf-8'))
 
         ser.close()
@@ -110,6 +111,5 @@ def GetPosColor(n): #function returning the color picked by the user and the pos
 buttonlist = []
 MAIN = MATRIX(40)
 LEDLIST = []
-datatowrite=[]
 
 interface()
