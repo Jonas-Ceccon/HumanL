@@ -26,9 +26,6 @@ void loop() {
   delay(100); //wait for python to set itself back in order to recieve data
   Serial.println("START"); //tell python that the START marker was recieved
   waitinput(); //wait for python's input
-  
-  int lengt = Serial.read(); //this variable sent by python is the total ammount of data that will be sent through serial port (/!\ including the two markers, START and END /!\)
-  delay(100);//wait for python
   }
   
   
