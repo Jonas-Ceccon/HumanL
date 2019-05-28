@@ -3,36 +3,56 @@
   #include <avr/power.h>
 #endif
 
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(40, 6, NEO_GRB + NEO_KHZ800); //declaration of the variable that will contain the function called when we wnt to change a pixel's color
-
+#define  PIN 6
+#define PIXELS 40
+int line_p = 0;
+int column_p = 0;
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(40, PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {
-  Serial.begin(9600); //if you want to change this, do not forget to change it on Python
   // put your setup code here, to run once:
-
+  pixels.begin();
+  Serial.begin(9600);
 }
 
-void loop() {
-  while(!Serial){ //do nothing until a serial port is connected (i'll put the code that runs an already existent map for the pixel matrix before this line)
-    ;
-  }
-  waitinput(); //wait for serial input
-  while(Serial.readString() != "START"){//if the serial input isn't the SRART marker from the pthon program, then do nothing
-    delay(100); //wait for python to be in a 'recieving mood'
-    Serial.write("no START marker recieved"); //send the error code to python
-    waitinput(); //wait for another serial input
-  }
-
-  delay(100); //wait for python to set itself back in order to recieve data
-  Serial.println("START"); //tell python that the START marker was recieved
-  waitinput(); //wait for python's input
-  }
-  
-  
+void loop()
+{
+    if (Serial.available())
+    {
+        String a = Serial.readString();
+        while(!Serial.available()){
+          ;
+        }
+        String R = Serial.readString();
+        while(!Serial.available()){
+          ;
+        }
+        String G = Serial.readString();
+        while(!Serial.available()){
+          ;
+        }
+        String B = Serial.readString();
+        
+        Serial.print("Received Values: ");
+        Serial.println(a);
+        int n = a.toInt();
+        Serial.println(R);
+        int r = R.toInt();
+        Serial.println(G);
+        int g = G.toInt();
+        Serial.println(B);
+        int b = B.toInt();
+        if ((n >= 0) && (n <= PIXELS))
+        {
+            pixels.setPixelColor(n, r, g, b);
+            pixels.show();
+            delay(1000);
+        }
+    }
 }
 
-void waitinput(){ //definition of the function that waits for serial inputs..
-  while (!Serial.available()){ //..yup, that's just what I said
-    ;
-  }
+int select_pixel(int pos){
+  pixels.setPixelColor(pos, pixels.Color(30, 30, 30));
+  pixels.show();
+  return pos;
 }
