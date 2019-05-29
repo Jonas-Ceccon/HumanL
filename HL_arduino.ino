@@ -15,11 +15,17 @@ void setup() {
   Serial.begin(9600);
 }
 
-void loop()
-{
-    if (Serial.available())
-    {
-        String a = Serial.readString();
+
+void loop(){
+  if (Serial.available()){
+      while (true){
+        while(!Serial.available()){
+          ;
+        }
+        String first = Serial.readString();
+        if(first == "END"){
+          break;
+        }
         while(!Serial.available()){
           ;
         }
@@ -34,8 +40,8 @@ void loop()
         String B = Serial.readString();
         
         Serial.print("Received Values: ");
-        Serial.println(a);
-        int n = a.toInt();
+        Serial.println(first);
+        int n = first.toInt();
         Serial.println(R);
         int r = R.toInt();
         Serial.println(G);
@@ -46,11 +52,10 @@ void loop()
         {
             pixels.setPixelColor(n, r, g, b);
             pixels.show();
-            delay(1000);
         }
+      }
     }
-}
-
+  }
 int select_pixel(int pos){
   pixels.setPixelColor(pos, pixels.Color(30, 30, 30));
   pixels.show();
