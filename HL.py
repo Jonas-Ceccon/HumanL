@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.colorchooser import *
 from functools import partial
 import serial
+import time
 
 class LED: #definition of the led objects
     def __init__(self,pos,R,G,B): #each led is defined by it's number attributed in the matrix following the arduino adafruit neomatrix standard
@@ -47,30 +48,25 @@ class MATRIX: #definition of the matrix object
 
 
     def sendfile(self):
-        ser = serial.Serial('COM1', 9600) #the port that will be used for comunications
+        
 
         fil = open('map.txt', "r") # now we open the file that we created earlier
         length = 4*int(fil.readline())# we read the information that gives us the number of information that will be sent
         
-        ser.write(bytes(fil.readline())) #We send the START marker
-        
-        recv = "" #this variable will contain things that the arduino sends
+        #STARTstr = fil.readline() #We skip the START marker
+
+        ser = serial.Serial('COM16', 9600) #the port that will be used for comunications
+        time.sleep(1)
+        for i in range(length+1): # we send the informations...
             
-        for i in range(10000): #now we wait fir the arduino to respond
-            recv += str(ser.read_line()) #we add anything sent by the arduino to this variable
-        
-        print(recv) #debug    
-        
-        if recv == "" :
-            exit() #if we did not recieve anything, we close the program as there should be an error
-        
-        for i in range(length): # we send the informations...
-            a=str(fil.readline()) # ...line by line
-            print(a) #debug
-            ser.write(bytes(a, 'utf-8'))
-            
-        ser.write(bytes(fil.readline())) #We send the END marker
+            a=str(fil.readline()).rstrip('\n') # ...line by line
+            print(a.encode()) #debug
+            ser.write(a.encode())
+            time.sleep(1)
         ser.close()
+            
+        #ser.write(fil.readline().encode()) #We send the END marker
+        
 
 
 
