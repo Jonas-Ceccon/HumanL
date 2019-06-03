@@ -18,19 +18,38 @@ class MATRIX: #definition of the matrix object
     def color(self, posi, Rcolor,Gcolor,Bcolor,HEXcolor): #the function called by pressing a button and selecting a button
         print(posi)
         for i in range(len(LEDLIST)): #check if the defined LED already exists in the list of all the leds
-
+            
             if LEDLIST[i].pos == posi :
-                print(posi) #debug
+                
+                print('defined by replacement') #debug
                 LEDLIST[i].pos = str(posi)
                 LEDLIST[i].R = str(Rcolor)
                 LEDLIST[i].G = str(Gcolor)
                 LEDLIST[i].B = str(Bcolor)
                 #if it exists, we are redefining the RGB attributes of the concerned object as str elements in order to write them in a txt file
                 buttonlist[posi].configure(bg = HEXcolor)
-                return
+                break
+                    
+            if len(LEDLIST) == i+1 :
+                
+                LEDLIST.append(LED(str(posi),str(Rcolor),str(Gcolor),str(Bcolor)))# if it does not exist, we are defining it
+                buttonlist[posi].configure(bg = HEXcolor)
+                #print('defined by looping')
+                break
+            print(i)
 
-        LEDLIST.append(LED(str(posi),str(Rcolor),str(Gcolor),str(Bcolor)))# if it doesn't already exists, we are defining it
-        buttonlist[posi].configure(bg = HEXcolor)
+
+        if len(LEDLIST) == 0 :
+                    
+            LEDLIST.append(LED(str(posi),str(Rcolor),str(Gcolor),str(Bcolor)))# if it's the first LED, we have no other choice that redefining it
+            buttonlist[posi].configure(bg = HEXcolor)
+            #print('defined by 0')        
+
+        else :
+            ""
+            #print('undefined')
+                        
+            
 
     def writefile(self): #the function called when the WRITE button is pressed
       fil = open("map.txt", "w")
@@ -51,7 +70,7 @@ class MATRIX: #definition of the matrix object
         
 
         fil = open('map.txt', "r") # now we open the file that we created earlier
-        length = 4*int(fil.readline())# we read the information that gives us the number of information that will be sent
+        length = 4*int(fil.readline())+1# we read the information that gives us the number of information that will be sent
         
         #STARTstr = fil.readline() #We skip the START marker
 
