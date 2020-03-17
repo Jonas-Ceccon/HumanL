@@ -16,3 +16,6 @@ This is how it works :
 
 5 - The arduino reads the datas that it wrote and lights the corresponding LEDs in the correspondings colors
 
+*** UPDATE ***
+
+I am now working on a more efficient way to end the program to the arduino by directly generating the Arduino script that corresponds to the template that the user will create
